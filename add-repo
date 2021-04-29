@@ -1,0 +1,187 @@
+#Set environment
+#!/bin/bash
+
+#Variabels
+#Keep the line below if you modify or change any part of this code!
+OG_Creator="oxmc"
+#Year this program was made.
+OG_Year="2021"
+#Get current year.
+Year="$(date +'%Y')"
+#Get the current date.
+todaydate="$(date +'%A,%B,%d,%Y')"
+#Prgram version
+VER="1.3"
+#CreateRepoTool version
+CRVER="0.1"
+
+fwe="0"
+ers=""
+
+#Functions
+function error {
+  echo -e "\e[91m$1\e[39m"
+  if [ "$2" == "exit" ]; then
+    exit 1
+  else
+    fwe="1"
+    ers+="$1"
+  fi
+}
+
+function warning {
+  echo -e "\e[91m$2\e[39m"
+  sleep "$1"
+}
+
+#Main
+#Check if OG_Year and Year are the same.
+if [[ "$OG_Year" -eq "$Year" ]]; then
+  #CopyYear is OG_Year
+  CopyYear="$OG_Year"
+else
+  #CopyYear is OG_Year + Year
+  CopyYear="$OG_Year - $Year"
+fi
+
+# flags. default is to launch app.
+if [[ "$1" == "--version" ]] || [[ "$1" == "-v" ]]; then
+  echo -e "
+  $(tput setaf 9)###############################################
+  $(tput setaf 9)# $(tput setaf 4)$(tput bold)add-repo version $VER by $OG_Creator | $CopyYear $(tput sgr 0)$(tput setaf 9) #
+  $(tput setaf 9)###############################################$(tput sgr 0)
+  "
+  exit 0
+elif [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  echo -e "
+    $(tput setaf 6)$(tput bold)USAGE:$(tput sgr 0)
+    $(tput bold)intended usage:$(tput sgr 0)
+    --repo URL - Add a repo to system from url eg. 'add-repo --repo https://oxmc.github.io/ObsidianOS/apt/name' adds the ObsidianOS-repo to your system.
+    --reset - Resets your '/etc/apt/sources.list' file to the backup add-repo made.
+    --uninstall-all - Uninstalls add-repo from your system completly.
+    --uninstall-keeprepos - Uninstalls add-repo from your system but keeps your apt backup and added repos.
+    $(tput setaf 6)$(tput bold)Extra commands that have no use:$(tput sgr 0)
+    --version or -v - print version and exit.
+    --help or -h - print this help and exit.
+    --author - print who made this and exit.
+  "
+  exit 0
+elif [[ "$1" == "--author" ]]; then
+  echo -e "$(tput setaf 6)$(tput bold)Author:$(tput sgr 0) $OG_Creator"
+  exit 0
+elif [[ "$1" == "--create-repo" ]] || [[ "$1" == "-cr" ]]; then
+  echo -e "
+  $(tput setaf 9)###############################################
+  $(tput setaf 9)# $(tput setaf 4)$(tput bold)create repo tool version $CRVER by $OG_Creator | $CopyYear $(tput sgr 0)$(tput setaf 9) #
+  $(tput setaf 9)###############################################$(tput sgr 0)
+  "
+  echo "This tool will help assist you in making a config file for a add-repo repo."
+  echo "To quit at any time press CTRL + C"
+  echo ""
+  echo -e "$(tput setaf 9)What do you want to name your repo?$(tput sgr 0)"
+  read -p "Repo Name: " creponame
+  if [[ "$creponame" -ne null ]]; then
+    error "ERROR: You must name your repo!"
+    exit 1
+  else
+    echo -e "$(tput setaf 9)What URL do you want to use for your repo?$(tput sgr 0)"
+    read -p "Repo URL: " crepourl
+    if [[ "$crepourl" -ne null ]]; then
+      error "ERROR: You need to have a URL for a repo!"
+      exit 1
+    else
+      cresponse="true"
+      echo -e "$(tput setaf 9)Enter a message to display when a user adds your repo.$(tput sgr 0)"
+      read -p "Repo Message: " crepomessage
+      if [[ "$crepomessage" -ne null ]]; then
+	error "ERROR: Message is empty, setting message to: 'Thank you for adding the $creponame to your system!'"  				 
+        crepomessage="Thank you for adding the $creponame to your system!"
+      else
+	echo "Setting repo message to: '$crepomessage'"
+      fi
+      echo "Thank you for using create repo tool v$CRVER by $OG_Creator | $CopyYear"
+      echo -e "
+      $(tput setaf 9)###############################################
+      $(tput setaf 9)# $(tput setaf 4)$(tput bold)create repo tool version $CRVER by $OG_Creator | $CopyYear $(tput sgr 0)$(tput setaf 9) #
+      $(tput setaf 9)###############################################$(tput sgr 0)
+"
+      echo "#Repo Name
+$creponame
+
+#Repo URL
+$crepourl
+
+#Enable Repo Message
+$cresponse
+
+#Repo Message
+$crepomessage" > $HOME/$creponame-name
+      echo "Your generated config file has been saved to:"
+      echo "$HOME/$creponame-name"
+    fi
+  fi
+elif [[ "$1" == "--repo" ]]; then
+  if [[ "$2" -eq "" ]]; then
+    echo "ERROR: URL not provided."
+    echo "add-repo --repo URL | for help run 'add-repo --help'"
+  else
+    rm -rf name
+    repofile="$(wget $2)"
+    reponame="$(sed '2!d' name)"
+    repourl="$(sed '5!d' name)"
+    repomessageenable="$(sed '8!d' name)"
+    repomessage="$(sed '11!d' name)"
+    
+    if grep -q "$repourl" "/etc/apt/sources.list"; then
+      error "$reponame has already been added to your device."
+    else
+      echo "Adding the $reponame to your device..."
+      if [ -f "/home/apt.list" ];then
+        backup="true"
+      else
+        echo "Creating backup of /etc/apt/sources.list"
+      fi
+      sudo cp -r /etc/apt/sources.list /home/apt.list || error "Unable to cp /etc/apt/sources.list to /home/apt.list!"
+      echo "Adding repo to apt..."
+      echo "deb [trusted=yes] $repourl ./" | sudo tee -a /etc/apt/sources.list > /dev/null
+      echo "Done!"
+      echo "Updating apt sources..."
+      sudo apt-get update || error "Unable to run sudo apt-get update!"
+      echo "$reponame has been added to your system!"
+      echo "Message from repo: '$repomessage'"
+    fi
+  fi
+elif [[ "$1" == "--uninstall-all" ]]; then
+  echo "Uninstalling add-repo from your system..."
+  echo "Restoring apt files..."
+  sudo mv /home/apt.list /etc/apt/sources.list
+  echo "Done!"
+  sudo rm -rf /home/apt.list
+  echo "Removing add-repo from /usr/bin..."
+  sudo rm -rf /usr/bin/add-repo
+  echo "Done!"
+  echo "Successfully uninstall add-repo from your system!"
+elif [[ "$1" == "--uninstall-keeprepos" ]]; then
+  echo "Uninstalling add-repo from system but keeping added repos..."
+  echo "Removing add-repo from /usr/bin..."
+  sudo rm -rf /usr/bin/add-repo
+  echo "Done!"
+  echo "Successfully uninstall add-repo from your system!"
+elif [[ "$1" == "--reset" ]]; then
+  echo "Reseting apt files from system backup..."
+  sudo mv /home/apt.list /etc/apt/sources.list
+  echo "Done!"
+  echo "Successfully reset apt files!"
+else
+  error "ERROR: add-repo requires a valid command! | for help run 'add-repo --help'"
+  exit 1
+fi
+
+#Inform user that the script has finished
+#Check if finished with errors
+if [ "${fwe}" == "1" ]; then
+  echo "This script finished with errors, Here are the errors: ${ers}"
+  exit 1
+elif [ "${fwe}" == "0" ]; then
+  exit 0
+fi

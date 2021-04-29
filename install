@@ -1,0 +1,65 @@
+#Set environment
+#!/bin/bash
+
+#Variabels
+#Keep the line below if you modify or change any part of this code!
+OG_Creator="oxmc"
+#Year this program was made.
+OG_Year="2021"
+#Get current year.
+Year="$(date +'%Y')"
+#Get the current date.
+todaydate="$(date +'%A,%B,%d,%Y')"
+#Prgram version
+VER="1.0"
+#Deb url
+deburl="https://oxmc.github.io/files/apt/add-repo_1.3_all.deb"
+
+fwe="0"
+ers=""
+
+#Functions
+function error {
+  echo -e "\e[91m$1\e[39m"
+  if [ "$2" == "exit" ]; then
+    exit 1
+  else
+    fwe="1"
+    ers+="$1"
+  fi
+}
+
+function warning {
+  echo -e "\e[91m$2\e[39m"
+  sleep "$1"
+}
+
+#Main
+#Check if OG_Year and Year are the same.
+if [[ "$OG_Year" -eq "$Year" ]]; then
+  #CopyYear is OG_Year
+  CopyYear="$OG_Year"
+else
+  #CopyYear is OG_Year + Year
+  CopyYear="%OG_Year - $Year"
+fi
+
+if [ -f "/usr/bin/add-repo" ]; then
+  error "add-repo is already installed!"
+else
+  echo "Installing add-repo..."
+  wget $deburl
+  echo "Downloaded add-repo_1.3_all.deb"
+  sudo dpkg -i add-repo_1.3_all.deb
+  echo "Installed!"
+  rm -rf add-repo_1.3_all.deb
+fi
+
+#Inform user that the script has finished
+#Check if finished with errors
+if [ "${fwe}" == "1" ]; then
+  echo "This script finished with errors, Here are the errors: ${ers}"
+  exit 1
+elif [ "${fwe}" == "0" ]; then
+  exit 0
+fi
