@@ -12,7 +12,7 @@ or if the repo has `not` been added it will add the repo to your system.
 
 ## Install
 
-To install add-repo run ```wget -O - https://github.com/oxmc/add-repo/main/install | bash```.
+To install add-repo run ```wget -O - https://raw.githubusercontent.com/oxmc/add-repo/main/install | bash```.
 
 ## Uninstall
 
