@@ -13,7 +13,7 @@ todaydate="$(date +'%A,%B,%d,%Y')"
 #Prgram version
 VER="1.0"
 #Deb url
-deburl="https://oxmc.github.io/files/apt/add-repo_1.3_all.deb"
+deburl="http://oxmc.github.io/files/rpi/apps/apt/add-repo_1.3_all.deb"
 
 fwe="0"
 ers=""
