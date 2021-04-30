@@ -26,7 +26,7 @@ To list all commands run ```add-repo --help``` or ```add-repo -h```.
 
 ## Step 1
 
-To create a repo foradd-repo run ```add-repo --create-repo``` or ```add-repo -cr```,
+To create a repo for add-repo run ```add-repo --create-repo``` or ```add-repo -cr```,
 after you have made your `add-repo config file` you need a website to host the file, i use githubpages but any http or https server will work.
 
 ## Step 2
