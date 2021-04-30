@@ -146,7 +146,7 @@ elif [[ "$1" == "--repo" ]]; then
       echo "deb [trusted=yes] $repourl ./" | sudo tee -a /etc/apt/sources.list > /dev/null
       echo "Done!"
       echo "Updating apt sources..."
-      sudo apt-get update || error "Unable to run sudo apt-get update!"
+      sudo apt-get update #|| error "This either means that a: You are not able to run sudo apt-get update, or b: The repo url does not have a Packages.gz file."
       echo "$reponame has been added to your system!"
       echo "Message from repo: '$repomessage'"
     fi
