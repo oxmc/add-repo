@@ -7,7 +7,7 @@ With add-repo all you have to do is ```add-repo --repo repourl```, and that`s it
 
 add-repo will handle all of that for you!
 add-repo will make a backup of your `/etc/apt/sources.list` file
-and check if the repo has already benn added, if so it will not add the repo,
+and check if the repo has already been added, if so it will not add the repo,
 or if the repo has `not` been added it will add the repo to your system.
 
 ## Install
