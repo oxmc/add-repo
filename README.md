@@ -3,7 +3,7 @@
 ## About:
 
 add-repo was made so that you don't have to run `echo "deb [trusted=yes] repourl ./" | sudo tee -a /etc/apt/sources.list > /dev/null` all the time to add a repo to apt.
-With add-repo all you have to do is ```add-repo --repo repourl```, and that`s it! No more messing with the apt files!
+With add-repo all you have to do is ```add-repo --repo repourl```, and that's it! No more messing with the apt files!
 
 add-repo will handle all of that for you!
 add-repo will make a backup of your `/etc/apt/sources.list` file
