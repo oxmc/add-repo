@@ -41,7 +41,7 @@ if [[ "$OG_Year" -eq "$Year" ]]; then
   CopyYear="$OG_Year"
 else
   #CopyYear is OG_Year + Year
-  CopyYear="%OG_Year - $Year"
+  CopyYear="$OG_Year - $Year"
 fi
 
 if [ -f "/usr/bin/add-repo" ]; then
