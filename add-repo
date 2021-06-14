@@ -56,7 +56,7 @@ elif [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
   echo -e "
     $(tput setaf 6)$(tput bold)USAGE:$(tput sgr 0)
     $(tput bold)intended usage:$(tput sgr 0)
-    --repo [URL] | Add a repo to system from url eg. 'add-repo --repo https://oxmc.github.io/ObsidianOS/apt/name' adds the ObsidianOS-repo to your system.
+    --repo [URL] | Add a repo to system from url eg. 'add-repo --repo https://oxmc.github.io/snorain/apt/name' adds the snorainOS-repo to your system.
     --reset | Resets your '/etc/apt/sources.list' file to the backup add-repo made.
     --uninstall-all | Uninstalls add-repo from your system completly.
     --uninstall-keeprepos | Uninstalls add-repo from your system but keeps your apt backup and added repos.
