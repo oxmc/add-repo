@@ -56,6 +56,7 @@ else
   #sudo dpkg -i add-repo_1.3_all.deb
   echo "Installed!"
   #rm -rf add-repo_1.3_all.deb
+  rm -rf ~/install
 fi
 
 #Inform user that the script has finished
