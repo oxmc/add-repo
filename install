@@ -50,6 +50,7 @@ else
   echo "Installing add-repo..."
   wget https://raw.githubusercontent.com/oxmc/add-repo/main/add-repo
   sudo mv ~/add-repo /usr/bin/add-repo
+  sudo chmod +x /usr/bin/add-repo
   #wget $deburl
   #echo "Downloaded add-repo_1.3_all.deb"
   #sudo dpkg -i add-repo_1.3_all.deb
