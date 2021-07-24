@@ -140,8 +140,8 @@ elif [[ "$1" == "--repo" ]]; then
         backup="true"
       else
         echo "Creating backup of /etc/apt/sources.list"
+	sudo cp -r /etc/apt/sources.list /home/apt.list || error "Unable to cp /etc/apt/sources.list to /home/apt.list!"
       fi
-      sudo cp -r /etc/apt/sources.list /home/apt.list || error "Unable to cp /etc/apt/sources.list to /home/apt.list!"
       echo "Adding repo to apt..."
       echo "deb [trusted=yes] $repourl ./" | sudo tee -a /etc/apt/sources.list > /dev/null
       echo "Done!"
